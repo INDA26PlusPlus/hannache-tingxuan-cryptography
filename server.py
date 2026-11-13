@@ -92,7 +92,7 @@ while True:
         file_id = int(message[1])
         if all_data[file_id] == None:
             connection.sendall(b"EMPTY\n")
-            break
+            continue
 
         top_hash = tree[1].hex()
         components = get_components(tree, file_id)

@@ -22,20 +22,38 @@ def start_client():
     #client is how i make the connections from now on
     return client
 
-def ask_for_input(counter):
+def ask_for_input():#counter):
     a = input("What do you wanna do? (1 = Send, 2 = Read, 3 = Quit): ")
     msg = ""
     id = ""
+
     if a == "1":
         action = "send"
         msg = input("What data do you wanna send: ")
-        id = input("which_pos? (defult is next on counter enter enter): ")
-        if id == "\n":
-            id = str(counter)
-            counter += 1
+        while True:
+            id = input("which_pos? (defult is next on counter enter enter): ")
+            if id == "":
+                break
+            if id.isdigit():
+                if int(id) < 8:
+                    break
+            print("please chose an id between and including 0 and 7")
+
+
+        # if id == "":
+        #     id = str(counter)
+#            counter += 1 this is heykey useuess because its a local variable.
     elif a == "2":
         action = "read"
-        id = input("Which id to read? ")
+        while True:            
+            id = input("Which id to read? ")
+            if id == "":
+                break
+            if id.isdigit():
+                if int(id) < 8 and int(id) >= 0:
+                    break
+            print("please chose an id between and including 0 and 7")
+
     else:
         action = "quit"
     return action, msg, id
@@ -81,7 +99,11 @@ expected_top_hash = bytes.fromhex(recieve_data(client)) #temporary the server is
 
 #this loops
 while True:
-    action, file_msg, file_id = ask_for_input(counter)
+    action, file_msg, file_id = ask_for_input()
+
+    if file_id == "":
+        file_id = counter
+        counter += 1
 
     if action == "quit":
         client.sendall(b"QUIT\n") #tell server to close
